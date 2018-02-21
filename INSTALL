@@ -1,0 +1,9 @@
+Building MNcash
+
+See doc/readme-qt.rst for instructions on building MNcash QT,
+the intended-for-end-users, nice-graphical-interface, reference
+implementation of MNcash.
+
+See doc/build-*.txt for instructions on building MNcashd,
+the intended-for-services, no-graphical-interface, reference
+implementation of MNcash.

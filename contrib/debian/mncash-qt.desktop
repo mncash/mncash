@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=MNcash
+Comment=MNcash P2P Cryptocurrency
+Comment[fr]=MNcash, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=MNcash, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/mncash-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/bitcoin80.xpm
+MimeType=x-scheme-handler/mncash;
+Categories=Office;
