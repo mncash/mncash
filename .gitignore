@@ -2,7 +2,6 @@ mncash.pro.user
 qrc_bitcoin.cpp
 .qmake.stash
 MNcash-qt
-Makefile
 build/*.o
 build/*.cpp
 build/*.moc

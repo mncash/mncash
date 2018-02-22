@@ -6,7 +6,7 @@ Algorithm: x13
 
 Total Coins: Approx 99,999,999 in POW/POS.
 
-2% premine (masternode initial, bounties and promotions)
+0.06% premine (10 masternode initial)
 
 Block Reward: 50% miner/50% masternode
 60000 MN (Block 1) Premine

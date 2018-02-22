@@ -135,38 +135,39 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64_t* pFees)
         CReserveKey reservekey(pwallet);
         txNew.vout[0].scriptPubKey.SetDestination(reservekey.GetReservedKey().GetID());
 
-        bool hasPayment = true;
-        CScript payee;
-        CTxIn vin;
+	if (pindexPrev->nHeight+1 > 100){
+	        bool hasPayment = true;
+	        CScript payee;
+	        CTxIn vin;
 
-        //spork
-        if(!masternodePayments.GetBlockPayee(pindexPrev->nHeight+1, payee)){
-            //no masternode detected
-            int winningNode = GetCurrentMasterNode(1);
-            if(winningNode){
-                payee = GetScriptForDestination(vecMasternodes[winningNode].pubkey.GetID());
-            } else {
-                printf("CreateNewBlock PoW: Failed to detect masternode to pay\n");
-                // pay the burn address if it can't detect
-                std::string burnAddy = (!fTestNet ? FOUNDATION : FOUNDATION_TEST); //Foundation
-                CBitcoinAddress burnAddr;
-                burnAddr.SetString(burnAddy);
-                payee = GetScriptForDestination(burnAddr.Get());
-            }
-        }
+	        //spork
+	        if(!masternodePayments.GetBlockPayee(pindexPrev->nHeight+1, payee)){
+	            //no masternode detected
+	            int winningNode = GetCurrentMasterNode(1);
+	            if(winningNode){
+	                payee = GetScriptForDestination(vecMasternodes[winningNode].pubkey.GetID());
+	            } else {
+	                printf("CreateNewBlock PoW: Failed to detect masternode to pay\n");
+	                // pay the burn address if it can't detect
+	                std::string burnAddy = (!fTestNet ? FOUNDATION : FOUNDATION_TEST); //Foundation
+	                CBitcoinAddress burnAddr;
+	                burnAddr.SetString(burnAddy);
+	                payee = GetScriptForDestination(burnAddr.Get());
+	            }
+		}
 
-        if(hasPayment)
-        {
-            txNew.vout.resize(2);
-            txNew.vout[1].scriptPubKey = payee;
+	        if(hasPayment)
+	        {
+	            txNew.vout.resize(2);
+	            txNew.vout[1].scriptPubKey = payee;
 
-            CTxDestination address1;
-            ExtractDestination(payee, address1);
-            CBitcoinAddress address2(address1);
+	            CTxDestination address1;
+	            ExtractDestination(payee, address1);
+	            CBitcoinAddress address2(address1);
 
-            printf("PoW Masternode payment to %s\n", address2.ToString().c_str());
-        }
-
+	            printf("PoW Masternode payment to %s\n", address2.ToString().c_str());
+        	}
+	}
     }
     else
     {
@@ -400,8 +401,13 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64_t* pFees)
 
         if (!fProofOfStake)
         {
-            pblock->vtx[0].vout[0].nValue = GetProofOfWorkReward(nFees) - devCoin;
-            pblock->vtx[0].vout[1].nValue = devCoin;
+		if (pindexPrev->nHeight+1 > 100){
+	            pblock->vtx[0].vout[0].nValue = GetProofOfWorkReward(nFees) / 2;
+	            pblock->vtx[0].vout[1].nValue = GetProofOfWorkReward(nFees) / 2;
+		} else{
+                    pblock->vtx[0].vout[0].nValue = GetProofOfWorkReward(nFees);
+                    pblock->vtx[0].vout[1].nValue = devCoin;
+		}
         }
 
         if (pFees)
